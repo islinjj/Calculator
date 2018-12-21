@@ -19,26 +19,42 @@ public class Poland {
 	/**
 	 * 分割表达式,返回字符串数组
 	 */
-	private String[] split(String express) {
+	private  static String[] split(String express) {
 		//测试用例
 		//express ="3+4*(5-2)-6/(1+2)";
 		
 		//sb用来存储分割后的字符串，容量为字符串大小
-		//若使用正则表达式？？
+		
 		StringBuilder sb = new StringBuilder(express.length());
 		for (char ch : express.toCharArray()) {
-			if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '(' || ch == ')') {
+			
+			//若使用正则表达式？？
+			String str = "\\+|-|\\*|/|\\(|\\)";
+			//如果和str匹配则就加入StringBuilder
+			if(String.valueOf(ch).matches(str)) {
+				//使用","分割
 				sb.append(",");
 				sb.append(ch);
 				sb.append(",");
 			} else {
 				sb.append(ch);
 			}
+			
+			//使用if进行分割
+			/*if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '(' || ch == ')') {
+				sb.append(",");
+				sb.append(ch);
+				sb.append(",");
+			} else {
+				sb.append(ch);
+			}*/
 		}
 
 		//因为前面会导致逗号至少出现两次{2，}表示至少出现2次
-		//replaceAll（正则表达式，替代物）
+		//replaceAll（正则表达式，替代物）.
 		String string = sb.toString().replaceAll(",{2,}", ",");
+		
+		System.out.println(string);
 		
 		//返回以”，“为分隔符的字符串数组
 		return string.split(",");
@@ -169,13 +185,13 @@ public class Poland {
 		return st.toString();
 	}
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		// 测试表达式
-		String express = "32+4*(5-2)-6/(1+2)"; //(32)(4)(5)(2)-*+(6)(1)(2)+/-
-		//split(express);
+		String express = "2+7*(1+10)"; //(32)(4)(5)(2)-*+(6)(1)(2)+/-
+		split(express);
 		// 逆波兰表达式
-		express = ReversePoland(express);
-		System.out.print(express);
-	}*/
+		//express = ReversePoland(express);
+		//System.out.print(express);
+	}
 
 }
