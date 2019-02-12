@@ -119,9 +119,76 @@ public class Calculate {
 	 */
 	public String mul() {
 
-		int r = (Integer.parseInt(firstNum)) * (Integer.parseInt(secondNum));
+		// 存进位数
+		int carry;
 
-		result = String.valueOf(r);
+		String result = "";
+
+		// 将secondNum定位被乘数,如果firstNum的长度长过s2，那么交换
+		if (firstNum.length() < secondNum.length()) {
+			String tmp = firstNum;
+			firstNum = secondNum;
+			secondNum = tmp;
+		}
+
+		// 将字符串转换成字符数组
+		char[] c1 = firstNum.toCharArray();
+		char[] c2 = secondNum.toCharArray();
+
+		// 存储一次相乘的结果,存放的会是颠倒的，要记得reverse
+		StringBuilder sb;
+
+		// 其中一个字符串等于0，则输出“0”
+		if (firstNum.equals("0") || secondNum.equals("0")) {
+			return "0";
+		} else {
+			// 两个数都不为0的时候
+			for (int i = c2.length - 1; i >= 0; i--) {
+				sb = new StringBuilder();
+				// 如果被乘数只是“1”直接输出乘数
+				if (c2[i] == '1' && c2.length == 1) {
+					result = String.valueOf(c1);
+				} else {
+					// 当被乘数不只是“1”或“0”
+					// 遍历乘数
+					carry = 0;
+					for (int j = c1.length - 1; j >= 0; j--) {
+						// temp用来临时存放结果
+						int temp;
+						// 使用again用来累计当相乘结果与进位相加超过10的时候,防止多次使用carry会冲突
+						int again = 0;
+						// 将字符转换成数字后相乘
+						temp = Integer.parseInt(String.valueOf(c1[j])) * Integer.parseInt(String.valueOf(c2[i]));
+						// 如果个数相乘是有进位的
+
+						// 当进位与结果相加大于等于10
+						if (carry + temp % 10 >= 10) {
+							again++;
+						}
+						sb.append((temp % 10 + carry) % 10);
+						carry = temp / 10 + again;
+						// 当有进位，要使得最后相乘的最高为有数
+						if (j == 0 && carry != 0) {
+							sb.append(carry);
+						}
+					}
+					// 将结果进行累加
+					sb = sb.reverse();
+					// 补0
+					int k = i;
+					while (k < c2.length - 1) {
+						sb.append("0");
+						k++;
+					}
+					
+					//处理乘法相加
+					firstNum = sb.toString();
+					secondNum = result;
+
+					result = add();
+				}
+			}
+		}
 
 		return result;
 	}
@@ -158,9 +225,4 @@ public class Calculate {
 		return s;
 	}
 
-	// 测试
-	/*
-	 * public static void main(String[] args) { Calculate c = new Calculate();
-	 * c.setValue("001100", "0"); System.out.println(c.add()); }
-	 */
 }

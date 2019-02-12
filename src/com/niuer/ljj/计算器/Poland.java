@@ -28,7 +28,7 @@ public class Poland {
 		StringBuilder sb = new StringBuilder(express.length());
 		for (char ch : express.toCharArray()) {
 			
-			//若使用正则表达式？？
+			//使用正则表达式
 			String str = "\\+|-|\\*|/|\\(|\\)";
 			//如果和str匹配则就加入StringBuilder
 			if(String.valueOf(ch).matches(str)) {
