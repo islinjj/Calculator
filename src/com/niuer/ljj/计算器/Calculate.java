@@ -122,7 +122,7 @@ public class Calculate {
 		// 存进位数
 		int carry;
 
-		String result = "";
+		result = "";
 
 		// 将secondNum定位被乘数,如果firstNum的长度长过s2，那么交换
 		if (firstNum.length() < secondNum.length()) {
@@ -180,8 +180,8 @@ public class Calculate {
 						sb.append("0");
 						k++;
 					}
-					
-					//处理乘法相加
+
+					// 处理乘法相加
 					firstNum = sb.toString();
 					secondNum = result;
 
@@ -197,9 +197,82 @@ public class Calculate {
 	 * 除法
 	 */
 	public String div() {
-		int r = (Integer.parseInt(firstNum)) / (Integer.parseInt(secondNum));
 
-		result = String.valueOf(r);
+		// 商
+		int quotient;
+
+		// 除数
+		int div = Integer.parseInt(secondNum);
+
+		char[] divisor = firstNum.toCharArray();
+
+		//如果除数是“0”则会出现错误
+		if (secondNum == "0") {
+			return "错误";
+		}
+		// 记录余数
+		StringBuilder remainder = new StringBuilder();
+		int r;
+
+		// 商
+		StringBuilder sb = new StringBuilder();
+		// 记录被除数
+		StringBuilder b = new StringBuilder();
+		
+		//如果两个数相同，那么就返回“1”，在此处处理就不必进入循环
+		if(firstNum.equals(secondNum)) {
+			return "1";
+		}
+
+		//先添加第一位被除数
+		b.append(divisor[0]);
+		
+		//j用来记录被除数的每一位
+		int j=0;
+		
+		// i用来记录除的次数
+		for (int i = 0; i < divisor.length; i++) {
+			// 使用divisor[i]是字符处理，比较的是ASCII码值
+			if (Integer.parseInt(b.toString()) < div && i == 0) {
+				// 如果被除数的第一位小于除数则添加下一位被除数
+				b.append(divisor[++j]);
+			}
+			// 商
+			quotient = (Integer.parseInt(b.toString()) / div);
+			sb.append(quotient);
+			
+			//如果被除数位数除完了就退出
+			if(j==divisor.length-1) {
+				break;
+			}
+			
+			// 余数
+			r = (Integer.parseInt(b.toString()) % div);
+			
+			//余数不为0，就添加到remainder
+			if(r!=0) {
+				remainder.append(r);
+			}else if(r==0) {
+				//余数为0就添加下一位
+				remainder.append(divisor[++j]);
+			}
+			
+			//如果余数小于除数就继续添加下一位，直到余数不小于除数，后再赋给被除数进行下一轮的除法运算
+			if (Integer.parseInt(remainder.toString()) < div) {
+				remainder.append(divisor[++j]);
+			}
+			
+			// 余数赋值给被除数
+			b = remainder;
+			//更新余数
+			remainder=new StringBuilder();
+		}
+
+		// 处理商是小数的
+		
+		//去掉前面的“0”
+		result = sb.toString().replaceAll("^(0+)", "");
+
 		return result;
 	}
 
